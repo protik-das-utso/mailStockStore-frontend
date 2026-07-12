@@ -1,6 +1,6 @@
 {
-  "name": "MailStock.store",
-  "short_name": "MailStock",
+  "name": "Mail Stock Store",
+  "short_name": "Mail Stock Store",
   "description": "Buy and sell verified digital email accounts safely.",
   "icons": [
     { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
