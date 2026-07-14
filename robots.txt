@@ -1,0 +1,12 @@
+User-Agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /buyer/
+Disallow: /seller/
+Disallow: /reviewer/
+Disallow: /account/
+Disallow: /support/
+Disallow: /r/
+
+Host: https://mailstock.store
+Sitemap: https://mailstock.store/sitemap.xml

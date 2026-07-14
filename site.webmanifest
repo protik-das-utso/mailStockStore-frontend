@@ -1,7 +1,7 @@
 {
   "name": "Mail Stock Store",
   "short_name": "Mail Stock Store",
-  "description": "Buy and sell verified digital email accounts safely.",
+  "description": "Buy and sell verified Gmail and Outlook accounts — reviewer-tested, instantly delivered, warranty backed.",
   "icons": [
     { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }

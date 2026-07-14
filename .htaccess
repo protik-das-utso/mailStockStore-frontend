@@ -1,0 +1,64 @@
+# Apache config for the static Next.js export (shared hosting / cPanel).
+# Lives in public/, so `npm run build` copies it into out/ automatically — upload it with the rest.
+
+# --- Canonical host + HTTPS -------------------------------------------------
+# Force https:// and the non-www host so every page has exactly one address. Google treats
+# http/https and www/non-www as different sites otherwise, and splits the ranking between them.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^(.*)$ https://mailstock.store/$1 [R=301,L]
+
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+</IfModule>
+
+# --- Routing ----------------------------------------------------------------
+# The export uses trailingSlash, so every route is a real directory containing index.html
+# (/about/ -> /about/index.html). Apache serves those via DirectoryIndex; DirectorySlash adds
+# the missing slash when someone requests /about. Only the 404 needs wiring up by hand.
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+# --- Caching ----------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Hashed build assets are immutable — cache them hard.
+  <FilesMatch "\.(js|css|woff2?|ttf|otf|eot)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  ExpiresByType image/png                 "access plus 30 days"
+  ExpiresByType image/jpeg                "access plus 30 days"
+  ExpiresByType image/webp                "access plus 30 days"
+  ExpiresByType image/svg+xml             "access plus 30 days"
+  ExpiresByType image/x-icon              "access plus 30 days"
+
+  # HTML must revalidate, or a deploy leaves users on a stale page pointing at old asset hashes.
+  ExpiresByType text/html                 "access plus 0 seconds"
+  # Let crawlers pick these up promptly after a redeploy.
+  ExpiresByType application/xml           "access plus 1 hour"
+  ExpiresByType text/plain                "access plus 1 hour"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# --- Compression ------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE application/xml image/svg+xml
+</IfModule>
+
+# --- Security headers -------------------------------------------------------
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
