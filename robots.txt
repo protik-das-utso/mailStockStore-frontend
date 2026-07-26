@@ -4,9 +4,13 @@ Disallow: /admin/
 Disallow: /buyer/
 Disallow: /seller/
 Disallow: /reviewer/
-Disallow: /account/
+Disallow: /profile/
+Disallow: /settings/
+Disallow: /notifications/
+Disallow: /referrals/
 Disallow: /support/
 Disallow: /r/
+Disallow: /browse/detail/
 
 Host: https://mailstock.store
 Sitemap: https://mailstock.store/sitemap.xml
